@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="zhongyi.sun">
+
+    <title>用例平台</title>
+
+    <link rel="stylesheet" href="dist/bootstrap.min.css">
+    <link rel="stylesheet" href="dist/sweetalert.min.css">
+    <link rel="stylesheet" href="dist/index.css">
+</head>
+
+<body>
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">用例平台</a>
+        </div>
+
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="env.html">POI环境</a></li>
+                <li><a href="http://10.125.1.236:9100/jsondoc-ui.html?url=http://10.125.1.236:9100/jsondoc#">Mock</a></li>
+                <li><a href="http://10.125.1.236:9200/">冰河流程</a></li>
+                <li><a href="http://10.125.1.236:9000/">检查项平台</a></li>
+
+                <!--<li class="dropdown">-->
+                <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown">检查项平台 <span class="caret"></span></a>-->
+                <!--<ul class="dropdown-menu" role="menu">-->
+                <!--<li><a href="http://10.125.1.236:9000/apply.html" target="_blank">任务申请</a></li>-->
+                <!--<li><a href="http://10.125.1.236:9000/case.html" target="_blank">用例查看</a></li>-->
+                <!--<li><a href="http://10.125.1.236:9000/result.html" target="_blank">检查结果</a></li>-->
+                <!--<li><a href="http://10.125.1.236:9000/version.html" target="_blank">版本结果</a></li>-->
+                <!--<li><a href="http://10.125.1.236:9000/checkChart.html" target="_blank">检查统计</a></li>-->
+                <!--<li><a href="http://10.125.1.236:9000/configManager.html" target="_blank">配置管理</a></li>-->
+                <!--<li><a href="http://10.125.1.236:9000/dataManager.html" target="_blank">平台管理</a></li>-->
+                <!--<li><a href="http://10.125.1.236:9000/checkReadme.html" target="_blank">用例说明</a></li>-->
+                <!--<li><a href="http://10.125.1.236:9000/search.html" target="_blank">数据库查询</a></li>-->
+                <!--</ul>-->
+                <!--</li>-->
+            </ul>
+        </div><!--/.navbar-collapse -->
+    </div>
+</nav>
+
+<div id="app" class="container-fluid">
+    <div class="row">
+        <div class="col-md-9">
+            <div class="form-inline form-group">
+                <label>项目：</label>
+                <input v-model="projectName" class="form-control" style="width: 100px">
+                <label>模块:</label>
+                <input v-model="moduleName" class="form-control" style="width: 180px">
+                <label>分组：</label>
+                <input v-model="groupName" class="form-control" style="width: 120px">
+                <label>创建者：</label>
+                <input v-model="caseAuthor" class="form-control" style="width: 120px">
+                <label>用例等级：</label>
+                <select v-model="caseLevel" class="form-control">
+                    <option value="-1">全部</option>
+                    <option value="0">冒烟</option>
+                    <option value="1">核心</option>
+                    <option value="1">一般</option>
+                    <option value="2">详细</option>
+                </select>
+                <button id="searchBtn" class="btn btn-primary" @click="setFilter">查找</button>
+                <button id="addBtn" class="btn btn-primary"  @click="add" data-toggle="modal" data-target="#addDialog">新增</button>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-inline form-group pull-right">
+                <label>每页</label>
+                <select class="form-control" v-model="perPage">
+                    <option>10</option>
+                    <option>20</option>
+                    <option>50</option>
+                    <option>100</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <vuetable v-ref:vuetable
+                  api-url="/cases"
+                  pagination-path=""
+                  :fields="fields"
+                  :sort-order="sortOrder"
+                  table-class="table table-bordered table-striped table-hover"
+                  ascending-icon="glyphicon glyphicon-chevron-up"
+                  descending-icon="glyphicon glyphicon-chevron-down"
+                  pagination-class=""
+                  pagination-info-class=""
+                  pagination-component-class=""
+                  :pagination-component="paginationComponent"
+                  :append-params="moreParams"
+                  :per-page="perPage"
+                  wrapper-class="vuetable-wrapper"
+                  table-wrapper=".vuetable-wrapper"
+                  loading-class="loading"
+                  detail-row-id="id"
+                  row-class-callback="rowClassCB"
+                  pagination-info-template="显示{from}到{to}，共{total}条记录"
+        ></vuetable>
+    </div>
+
+    <div class="modal fade" id="addDialog" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">新增</h3>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <div>
+                            <table class="table table-bordered table-striped">
+                                <colgroup>
+                                    <col class="col-xs-1">
+                                    <col class="col-xs-3">
+                                </colgroup>
+                                <tr>
+                                    <td >项目名称</td>
+                                    <td><input  v-model="addCase.project_name" size="50"  type="text" value="默认"></td>
+                                </tr>
+                                <tr>
+                                    <td >模块名称</td>
+                                    <td><input  v-model="addCase.module_name" size="50"  type="text" value="默认"></td>
+                                </tr>
+                                <tr>
+                                    <td >组名称</td>
+                                    <td><input  v-model="addCase.group_name" size="50"  type="text" value="默认"></td>
+                                </tr>
+
+                                <tr>
+                                    <td >用例名称</td>
+                                    <td><input  v-model="addCase.case_name" size="50"  type="text" value="默认用例"></td>
+                                </tr>
+                                <tr>
+                                    <td >用例备注</td>
+                                    <td><input  v-model="addCase.case_desc" size="50"  type="text" value="默认备注"></td>
+                                </tr>
+
+                                <tr>
+                                    <td>用例类型</td>
+                                    <td><select   v-model="addCase.case_type">
+                                        <option value="0" selected=true data-value="0">接口用例</option>
+                                        <option value="1" data-value="1">流程用例</option>
+                                    </select>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>用例等级</td>
+                                    <td><select   v-model="addCase.case_level">
+                                        <option value="0" data-value="0">冒烟</option>
+                                        <option value="1" data-value="1">核心</option>
+                                        <option value="2" selected=true data-value="1">一般</option>
+                                        <option value="3" data-value="1">详细</option>
+                                    </select>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div>
+                            <table  v-if="addCase.case_type==0" class="table table-bordered table-striped">
+                                <colgroup>
+                                    <col class="col-xs-1">
+                                    <col class="col-xs-3">
+                                </colgroup>
+                                <tr>
+                                    <td >一般参数</td>
+                                    <td><input v-model="addCase.case_content.para_map" size="50" type="text" value=""></td>
+                                </tr>
+                                <tr>
+                                    <td >文件参数</td>
+                                    <td><input  v-model="addCase.case_content.file_map" size="50" type="text" value=""></td>
+                                </tr>
+                                <tr>
+                                    <td >head参数</td>
+                                    <td><input  v-model="addCase.case_content.head_map" size="50" type="text" value=""></td>
+                                </tr>
+                                <tr>
+                                    <td >路由参数</td>
+                                    <td><input  v-model="addCase.case_content.route_para_list" size="50" type="text" value=""></td>
+                                </tr>
+                                <tr>
+                                    <td>访问方法</td>
+                                    <td><select   v-model="addCase.case_content.requst_type">
+                                        <option value="Get" selected=true data-value="Get">Get</option>
+                                        <option value="Post">Post</option>
+                                    </select>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>访问路径</td>
+                                    <td><input v-model="addCase.case_content.path" size="50" type="text" value=""></td>
+                                </tr>
+                            </table>
+                            <table v-if="addCase.case_type==1" class="table table-bordered table-striped">
+                                <colgroup>
+                                    <col class="col-xs-1">
+                                    <col class="col-xs-3">
+                                </colgroup>
+                                <tr>
+                                    <td>远程服务方法</td>
+                                    <td><input v-model="addCase.case_content.method" size="50" type="text" value=""></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" v-on:click="addCase()" data-dismiss="modal">确认</button>
+                    <button type="button" class="btn btn-default cancel" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editDialog" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">编辑</h3>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <div>
+                            <table class="table table-bordered table-striped">
+                                <colgroup>
+                                    <col class="col-xs-1">
+                                    <col class="col-xs-3">
+                                </colgroup>
+                                <tr>
+                                    <td >用例名称</td>
+                                    <td><input  v-model="editCase.case_name" size="50"  type="text" value="{{editCase.case_name}}"></td>
+                                </tr>
+                                <tr>
+                                    <td >用例备注</td>
+                                    <td><input  v-model="editCase.case_desc" size="50"  type="text" value="{{editCase.case_desc}}"></td>
+                                </tr>
+
+                            </table>
+                        </div>
+                        <div>
+                            <table  v-if="editCase.case_type==0" class="table table-bordered table-striped">
+                                <colgroup>
+                                    <col class="col-xs-1">
+                                    <col class="col-xs-3">
+                                </colgroup>
+                                    <tr>
+                                        <td >一般参数</td>
+                                        <td><input v-model="editCase.case_content.para_map" size="50" type="text" value="{{editCase.case_content.para_map}}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td >文件参数</td>
+                                        <td><input  v-model="editCase.case_content.file_map" size="50" type="text" value="{{editCase.case_content.file_map}}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td >head参数</td>
+                                        <td><input  v-model="editCase.case_content.head_map" size="50" type="text" value="{{editCase.case_content.head_map}}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td >路由参数</td>
+                                        <td><input  v-model="editCase.case_content.route_para_list" size="50" type="text" value="{{editCase.case_content.route_para_list}}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>访问方法</td>
+                                        <td><select   v-model="editCase.case_content.requst_type">
+                                            <option value="Get" data-value="{{editCase.case_content.requst_type}}">Get</option>
+                                            <option value="Post" data-value="{{editCase.case_content.requst_type}}">Post</option>
+                                        </select>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>访问路径</td>
+                                        <td><input v-model="editCase.case_content.path" size="50" type="text" value="{{editCase.case_content.path}}"></td>
+                                    </tr>
+                            </table>
+                            <table v-if="editCase.case_type==1" class="table table-bordered table-striped">
+                                <colgroup>
+                                    <col class="col-xs-1">
+                                    <col class="col-xs-3">
+                                </colgroup>
+                                    <tr>
+                                        <td>远程服务方法</td>
+                                        <td><input v-model="editCase.case_content.method" size="50" type="text" value="{{editCase.case_content.method}}"></td>
+                                    </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" v-on:click="save()" data-dismiss="modal">确认</button>
+                    <button type="button" class="btn btn-default cancel" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="detialDialog" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                    <div v-show="editCase.case_type==0">
+                        <h3 class="modal-title">接口用例</h3>
+                    </div>
+                    <div v-show="editCase.case_type==1">
+                        <h3 class="modal-title">流程用例</h3>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <template v-if="editCase.case_type==1">
+                            <div >
+                                <table class="table table-bordered table-striped">
+                                    <colgroup>
+                                        <col class="col-xs-1">
+                                        <col class="col-xs-2">
+                                    </colgroup>
+                                    <tr>
+                                        <td>远程服务方法</td>
+                                        <td>{{editCase.case_content.method}}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </template>
+                        <template v-if="editCase.case_type==0">
+                            <div >
+                                <table class="table table-bordered table-striped">
+                                    <colgroup>
+                                        <col class="col-xs-1">
+                                        <col class="col-xs-2">
+                                    </colgroup>
+                                    <tr>
+                                        <td>一般参数</td>
+                                        <td>{{editCase.case_content.para_map}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>文件参数</td>
+                                        <td>{{editCase.case_content.file_map}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>head参数</td>
+                                        <td>{{editCase.case_content.head_map}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>路由参数</td>
+                                        <td>{{editCase.case_content.route_para_list}}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>访问方法</td>
+                                        <td>{{editCase.case_content.requst_type}}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>访问路径</td>
+                                        <td>{{editCase.case_content.path}}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+
+    <footer>
+        <p>&copy; 2016 Alibaba, Inc.</p>
+    </footer>
+
+</div> <!-- /container -->
+
+<script src="dist/jquery.min.js"></script>
+<script src="dist/bootstrap.min.js"></script>
+<script src="dist/moment-with-locales.min.js"></script>
+<script src="dist/sweetalert.min.js"></script>
+<script src="dist/vue.min.js"></script>
+<script src="dist/vue-resource.min.js"></script>
+<script src="dist/vue-table.min.js"></script>
+<script src="dist/index.js"></script>
+</body>
+</html>

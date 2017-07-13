@@ -1,0 +1,12 @@
+httpclient:
+  connectTimeout: 3000
+  readTimeout: 10000
+  maxConnection: 100
+  maxConnectionPerHost: 20
+  retry: 3
+spring:
+  jackson:
+    property-naming-strategy: CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES
+    serialization-inclusion: non_null
+  jmx:
+    enabled: false

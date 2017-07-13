@@ -1,0 +1,6 @@
+2017-02-05 20:47:15.272  INFO 7884 --- [main] com.autonavi.poi.DemoApplication         : Starting DemoApplication on ali-102076nl with PID 7884 (D:\PoiTest\CaseX\target\classes started by qingshan.wqs in D:\PoiTest\CaseX)
+2017-02-05 20:47:15.287  INFO 7884 --- [main] com.autonavi.poi.DemoApplication         : The following profiles are active: dev
+2017-02-05 20:47:22.699  INFO 7884 --- [main] com.autonavi.poi.DemoApplication         : Started DemoApplication in 8.839 seconds (JVM running for 10.076)
+2017-02-05 22:09:42.646  INFO 6636 --- [main] com.autonavi.poi.DemoApplication         : Starting DemoApplication on ali-102076nl with PID 6636 (D:\PoiTest\CaseX\target\classes started by qingshan.wqs in D:\PoiTest\CaseX)
+2017-02-05 22:09:42.651  INFO 6636 --- [main] com.autonavi.poi.DemoApplication         : The following profiles are active: dev
+2017-02-05 22:09:49.517  INFO 6636 --- [main] com.autonavi.poi.DemoApplication         : Started DemoApplication in 8.285 seconds (JVM running for 8.973)

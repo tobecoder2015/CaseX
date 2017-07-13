@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>无标题页</title>
+<!--<meta http-equiv="Access-Control-Allow-Origin" content="www.163.com">-->
+<script src="dist/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $("#button").click(function(){
+        $("#div_name").load("http://www.163.com");
+    });
+
+    function myajax()
+    {
+        $.get('http://www.163.com','',function (data){
+            $('#show').html(data);
+        });
+
+    }
+    $(function(){
+        $('#ld').click(myajax);
+    })
+</script>
+</head>
+<body>
+<form id="form1" >
+    <input id="ld" value="载入" type="button"/>
+    <div id="show">显示内容</div>
+
+    <input id="button" value="载入" type="button"/>
+    <div id="div_name">显示内容</div>
+</form>
+</body>
+</html>
