@@ -5,8 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-    <meta name="author" content="zhongyi.sun">
-
     <title>用例平台</title>
 
     <link rel="stylesheet" href="dist/bootstrap.min.css">
@@ -15,38 +13,24 @@
 </head>
 
 <body>
+<header id="header" >
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand active" href="/" >用例平台</a>
+                <a class="navbar-brand" href="env.html">POI环境</a>
+            </div>
 
-<nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="/">用例平台</a>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="env.html">登录</a></li>
+                    <li><a href="test.html">test1</a></li>
+                    <li><a href="test2.html">test2</a></li>
+                </ul>
+            </div>
         </div>
-
-        <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="env.html">POI环境</a></li>
-                <li><a href="http://10.125.1.236:9100/jsondoc-ui.html?url=http://10.125.1.236:9100/jsondoc#">Mock</a></li>
-                <li><a href="http://10.125.1.236:9200/">冰河流程</a></li>
-                <li><a href="http://10.125.1.236:9000/">检查项平台</a></li>
-
-                <!--<li class="dropdown">-->
-                <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown">检查项平台 <span class="caret"></span></a>-->
-                <!--<ul class="dropdown-menu" role="menu">-->
-                <!--<li><a href="http://10.125.1.236:9000/apply.html" target="_blank">任务申请</a></li>-->
-                <!--<li><a href="http://10.125.1.236:9000/case.html" target="_blank">用例查看</a></li>-->
-                <!--<li><a href="http://10.125.1.236:9000/result.html" target="_blank">检查结果</a></li>-->
-                <!--<li><a href="http://10.125.1.236:9000/version.html" target="_blank">版本结果</a></li>-->
-                <!--<li><a href="http://10.125.1.236:9000/checkChart.html" target="_blank">检查统计</a></li>-->
-                <!--<li><a href="http://10.125.1.236:9000/configManager.html" target="_blank">配置管理</a></li>-->
-                <!--<li><a href="http://10.125.1.236:9000/dataManager.html" target="_blank">平台管理</a></li>-->
-                <!--<li><a href="http://10.125.1.236:9000/checkReadme.html" target="_blank">用例说明</a></li>-->
-                <!--<li><a href="http://10.125.1.236:9000/search.html" target="_blank">数据库查询</a></li>-->
-                <!--</ul>-->
-                <!--</li>-->
-            </ul>
-        </div><!--/.navbar-collapse -->
-    </div>
-</nav>
+    </nav>
+</header>
 
 <div id="app" class="container-fluid">
     <div class="row">
@@ -253,45 +237,45 @@
                                     <col class="col-xs-1">
                                     <col class="col-xs-3">
                                 </colgroup>
-                                    <tr>
-                                        <td >一般参数</td>
-                                        <td><input v-model="editCase.case_content.para_map" size="50" type="text" value="{{editCase.case_content.para_map}}"></td>
-                                    </tr>
-                                    <tr>
-                                        <td >文件参数</td>
-                                        <td><input  v-model="editCase.case_content.file_map" size="50" type="text" value="{{editCase.case_content.file_map}}"></td>
-                                    </tr>
-                                    <tr>
-                                        <td >head参数</td>
-                                        <td><input  v-model="editCase.case_content.head_map" size="50" type="text" value="{{editCase.case_content.head_map}}"></td>
-                                    </tr>
-                                    <tr>
-                                        <td >路由参数</td>
-                                        <td><input  v-model="editCase.case_content.route_para_list" size="50" type="text" value="{{editCase.case_content.route_para_list}}"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>访问方法</td>
-                                        <td><select   v-model="editCase.case_content.requst_type">
-                                            <option value="Get" data-value="{{editCase.case_content.requst_type}}">Get</option>
-                                            <option value="Post" data-value="{{editCase.case_content.requst_type}}">Post</option>
-                                        </select>
-                                        </td>
-                                    </tr>
+                                <tr>
+                                    <td >一般参数</td>
+                                    <td><input v-model="editCase.case_content.para_map" size="50" type="text" value="{{editCase.case_content.para_map}}"></td>
+                                </tr>
+                                <tr>
+                                    <td >文件参数</td>
+                                    <td><input  v-model="editCase.case_content.file_map" size="50" type="text" value="{{editCase.case_content.file_map}}"></td>
+                                </tr>
+                                <tr>
+                                    <td >head参数</td>
+                                    <td><input  v-model="editCase.case_content.head_map" size="50" type="text" value="{{editCase.case_content.head_map}}"></td>
+                                </tr>
+                                <tr>
+                                    <td >路由参数</td>
+                                    <td><input  v-model="editCase.case_content.route_para_list" size="50" type="text" value="{{editCase.case_content.route_para_list}}"></td>
+                                </tr>
+                                <tr>
+                                    <td>访问方法</td>
+                                    <td><select   v-model="editCase.case_content.requst_type">
+                                        <option value="Get" data-value="{{editCase.case_content.requst_type}}">Get</option>
+                                        <option value="Post" data-value="{{editCase.case_content.requst_type}}">Post</option>
+                                    </select>
+                                    </td>
+                                </tr>
 
-                                    <tr>
-                                        <td>访问路径</td>
-                                        <td><input v-model="editCase.case_content.path" size="50" type="text" value="{{editCase.case_content.path}}"></td>
-                                    </tr>
+                                <tr>
+                                    <td>访问路径</td>
+                                    <td><input v-model="editCase.case_content.path" size="50" type="text" value="{{editCase.case_content.path}}"></td>
+                                </tr>
                             </table>
                             <table v-if="editCase.case_type==1" class="table table-bordered table-striped">
                                 <colgroup>
                                     <col class="col-xs-1">
                                     <col class="col-xs-3">
                                 </colgroup>
-                                    <tr>
-                                        <td>远程服务方法</td>
-                                        <td><input v-model="editCase.case_content.method" size="50" type="text" value="{{editCase.case_content.method}}"></td>
-                                    </tr>
+                                <tr>
+                                    <td>远程服务方法</td>
+                                    <td><input v-model="editCase.case_content.method" size="50" type="text" value="{{editCase.case_content.method}}"></td>
+                                </tr>
                             </table>
                         </div>
                     </div>
